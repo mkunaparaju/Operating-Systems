@@ -13,25 +13,22 @@ class SingleModule {
 	private:
 	fstream* fin;
 	long fileSize;
-	int cou
-	nt;
+	int count;
 	char ch;
 	ReaderUtil* util;
-	SymbolList* sl;
 	
-	
-
-	
+		
 	public:
 	SingleModule(fstream* in, long fSize)
 	{
 		this->fin = in;
 		this->fileSize = fSize;
 		util = new ReaderUtil(fin, fileSize);
-		sl = new SymbolList();
+		
+		
 	}
 	 
-	void readDefList(int modCount, int baseAddr )
+	void* readDefList(int modCount, int baseAddr, SymbolList* sl )
 	{
 		Token<int> newInteger = util->getInteger(true);
 	
@@ -50,17 +47,20 @@ class SingleModule {
 			Symbol sym = util->getSymbol();
 			sym.setModCount(modCount);
 			sym.setModAddr(baseAddr);
-			sym.setRelAddr(baseAddr+)
-			
-			sl->pushList(sym);
+			//sym.setAbsAddr(baseAddr+);
 			//cout << " read the integer " << endl;
-			util->getInteger(false);
+			Token<int> tok = util->getInteger(false);
+			sym.setRelAddr(tok.getValue());
+			sym.setAbsAddr(baseAddr + tok.getValue());
+			sl->pushList(sym);
+			
 		}
+		
 	}
 	
 	void readUseList()
 	{
-		Token<int> newInteger = util->getInteger(true);
+		Token<int> newInteger = util->getInteger(false);
 		//cout << "reading use list" << endl;
 		int count = newInteger.getValue(); 
 		
@@ -72,15 +72,21 @@ class SingleModule {
 		
 		while(count--)
 		{
-			util->getSymbol();
+			Symbol sym = util->getSymbol();
+			
 		}
+		
 	}
 	
-	int readProgramText()
+	int readProgramText(int modCount)
 	{
-		Token<int> newInteger = util->getInteger(true);
+		Token<int> newInteger = util->getInteger(false);
 		//cout << "reading program text " << endl;
 		int count = newInteger.getValue(); 
+		if((count + modCount) > 512)
+		{
+			cout << "Parse error line " << newInteger.getLineNumber() << " offset " << newInteger.getColumnNumber() << " TO_MANY_INSTR " << endl ;
+		}			
 		//cout << " base addr1 " << baseAddr;
 		int progCount = count;
 		while(count--)

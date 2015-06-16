@@ -11,11 +11,11 @@
 
 using namespace std;
 
-
 	
 	int main(int argc, char* argv[])
 	{
 		long fileSize;
+		SymbolList* sl = new SymbolList();
 		if (argc != 2)
 		{
 			cout << "Number of arguments is not two " << endl;
@@ -31,14 +31,24 @@ using namespace std;
 			cout << "file is not good" << endl;
 			return 0;
 		}
-		FirstPass* fp = new FirstPass(myFile, fileSize);
-		fp->doFirstPass(myFile, fileSize);
-	
-		//ReaderUtil* util = new ReaderUtil(myFile, fileSize);
-		//cout << util->nextToken().getValue();
+		FirstPass* fp = new FirstPass(myFile, fileSize, sl);
+		fp->doFirstPass();
 		
+		sl->printList();
+		//ReaderUtil* util = new ReaderUtil(myFile, fileSize);
+		
+		delete fp;
+		myFile->close();
+		myFile = new fstream(argv[1], fstream::in);
+		myFile->unsetf(ios_base::skipws);
+		
+		//fileSize = myFile->tellg();
+		FirstPass* sp = new FirstPass(myFile, fileSize, sl);	
+		sp->doSecondPass();
+		sl->isDef();
 		return 0;
 	}
+	
 
 	 
 	

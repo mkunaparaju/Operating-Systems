@@ -13,6 +13,7 @@ private:
 	string token;
 	int modCount;
 	int modAddr;
+	int absAddr;
 	int relAddr;
 
 public:
@@ -23,13 +24,9 @@ public:
 		this->columnNumber = tok.getColumnNumber();
 		this->token = tok.getValue();
 	}
-	
-
-
-
 	void setMultDef(bool multDefined)
 	{
-		isMultDef = multDefined;;
+		isMultDef = multDefined;
 	}
 
 	bool getMultDef()
@@ -66,6 +63,16 @@ public:
 	}
 
 
+	void setAbsAddr(int absAddr)
+	{
+		this->absAddr = absAddr;
+	}
+
+	int getAbsAddr()
+	{
+		return absAddr;
+	}
+
 	void setRelAddr(int relAddr)
 	{
 		this->relAddr = relAddr;
@@ -74,9 +81,8 @@ public:
 	int getRelAddr()
 	{
 		return relAddr;
-	}
-	
-		string getToken( )
+	}	
+	string getToken( )
 	{
 		return token;
 	}

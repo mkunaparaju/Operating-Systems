@@ -33,12 +33,12 @@ public:
 		int length = 0;
 		int position = 0, tokenStartLine = lineNumber, tokenStartColumn = columnNumber;
 		char* token = new char[32];
+		token[0] = '\0';
 		bool tokenStart = false, isWhiteSpace = false, emptyLine = true;
 
 		//cout << "starting to read file " << endl;
 		
 		while(*(this->fin) >> c) {
-			//cout << "character is " << c;
 			if (c == '\n') {
 				if (this->fin->tellg() != this->fileSize) {
 					lineNumber++;
@@ -50,8 +50,6 @@ public:
 				emptyLine = false;
 				columnNumber++;
 			}
-
-			//cout << "Read character " << c << endl;
 			
 			isWhiteSpace = (c == ' ' || c == '\n' || c == '\t');
 
@@ -102,16 +100,18 @@ public:
 			//means that you are out definition list then str cannot be zero
 		{
 			//cout << " first num expected" << isDefList << " " << length << endl;
-			cout << "Parse Error Line at line " << tokenStartLine << "offset" << tokenStartColumn << " NUM_EXPECTED " << endl;
+			cout << "Parse Error Line at line " << tokenStartLine << "offset" << tokenStartColumn << ": NUM_EXPECTED " << endl;
 			exit(99);
 		}
 	
 		int count  = (int)strtol(str, &endptr,10);//count should be +ve
+		//cout << "count in getInteger is " << count << " " << str << endl;
 		//cout << "count is inside the getinteger function near endptr " << count << endl;
 		if(*endptr != '\0' || count < 0)
 		{
-			cout << " endptr " << endptr << " count  " << count ;
-			cout << " Parse Error Line " << tokenStartLine	<< " offset " << tokenStartColumn << " : NUM_EXPECTED " << endl;
+			cout << "passed if " << endptr << endl;
+			//cout << " endptr " << endptr << " count  " << count ;
+			cout << "Parse Error Line " << tokenStartLine	<< " offset " << tokenStartColumn << " :NUM_EXPECTED " << endl;
 			exit(99);	
 		}
 		
@@ -134,18 +134,18 @@ public:
 		//cout << " in getSymbol " << str;
 		if (length == 0)
 		{
-			cout << " parse error line " << tokenStartLine << " offset" << tokenStartColumn << " SYMBOL_EXPECTED" << endl;
+			cout << "Parse error line " << tokenStartLine << " offset" << tokenStartColumn << ": SYM_EXPECTED" << endl;
 			exit(99);
 		}
 		if 	(length > 16)
 		{
-			cout << " parse error line " << tokenStartLine << " offset " << tokenStartColumn << "SYM_TOLONG " << endl;
+			cout << "Parse error line " << tokenStartLine << " offset " << tokenStartColumn << ": SYM_TOLONG " << endl;
 			exit(99);
 		}
 		
 		if(c >= 48 && c < 57)
 		{
-			cout << " parse error line " << tokenStartLine << " offset " << tokenStartColumn << " SYMBOL_EXPECTED " << endl;
+			cout << "Parse error line " << tokenStartLine << " offset " << tokenStartColumn << ": SYM_EXPECTED " << endl;
 			exit(99);
 		}
 		
@@ -157,16 +157,50 @@ public:
 		Token<char*> tok = nextToken();
 		int length = tok.getLength();
 		char* str = tok.getValue();
-		char c = *(str+0);
+		char addr = *(str+0);
 		int tokenStartLine = tok.getLineNumber();
 		int tokenStartColumn = tok.getColumnNumber();
-		char addr = ('A'||'I'||'E'||'R');
-		if (c != addr)
-		{
-			cout << " parse error line " << tokenStartLine << " offset " << tokenStartColumn << " ADDR_EXPECTED " << endl;
+		//TODO use switch case to check.  This wont work at all
+		switch (addr){
+		case 'A':
+			break;
+		case 'R':
+			break;
+		case 'I':
+			break;
+		case 'E':
+			break;
+		default:
+			cout << "Parse error line " << tokenStartLine << " offset " << tokenStartColumn << ": ADDR_EXPECTED " << endl;
 			exit(99);
-		}
+			break;
+	}
+		return addr;
+	}
+	
+	Token<int> getInstr()
+	{
 		
-		return c;
+		Token<char*> tok = nextToken();
+		int length = tok.getLength();
+		string str = tok.getValue();
+		
+		int tokenStartLine = tok.getLineNumber();
+		int tokenStartColumn = tok.getColumnNumber();
+		
+		char* endptr;
+		int instr  = (int)strtol(str.c_str(), &endptr,10);
+		
+		if(*endptr != '\0' || instr < 0)
+		{
+			//cout << " endptr " << endptr << " count  " << count ;
+			cout << "Parse Error Line " << tokenStartLine	<< " offset " << tokenStartColumn << ": NUM_EXPECTED " << endl;
+			exit(99);	
+		}
+		//cout << "in getInstr " << str << endl;		
+		Token<int> newCountToken(tokenStartLine, tokenStartColumn, instr, length);
+		
+		return newCountToken;
+		
 	}
 };

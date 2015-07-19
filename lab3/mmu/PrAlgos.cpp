@@ -1,5 +1,6 @@
 #ifndef PR_ALGOS
 #define PR_ALGO
+
 using namespace std;;
 
 class Random: public AbstractAlgo
@@ -26,8 +27,8 @@ class SecondChance : public AbstractAlgo
 
 	public:
 		SecondChance(vector<Pte*>* ptable, vector<unsigned int>*ftable, vector<unsigned int>* ftopage) : AbstractAlgo(ptable, ftable, ftopage)
-		{
-		}
+	{
+	}
 
 		int getNewFrame()
 		{
@@ -61,9 +62,9 @@ class Clock: public AbstractAlgo
 		int pointer;
 	public:
 		Clock(vector<Pte*>* ptable, vector<unsigned int>*ftable, vector<unsigned int>* ftopage): AbstractAlgo(ptable, ftable,ftopage)
-		{
-			pointer =-1;
-		}
+	{
+		pointer =-1;
+	}
 
 		int getNewFrame() {
 			int frameNum = -1;
@@ -91,4 +92,57 @@ class Clock: public AbstractAlgo
 		}
 
 };;
+
+
+class VirtualClock: public AbstractAlgo
+{
+	private:
+		int pointer;
+	public:
+		VirtualClock(vector<Pte*>* ptable, vector<unsigned int>*ftable, vector<unsigned int>* ftopage): AbstractAlgo(ptable, ftable,ftopage)
+		{
+			//cout << "Creatinga  vritual clock object " << endl;
+			pointer =0;
+		}
+
+		int getNewFrame()
+		{
+			int frameNum = -1;
+
+			while(true) 
+			{				
+				frameNum = (pageTable->at(pointer))->pageFrameNum;
+			
+				if((pageTable->at(pointer))->present == 1)
+				{
+					cout << "the frame number "<< frameNum << " the page index "<< frameToPage->at(frameNum) << endl;
+					if((pageTable->at(pointer))->referenced == 0)
+					{
+						break;;
+					}
+					(pageTable->at(pointer))->referenced = 0;
+				}
+				pointer = (pointer+1)%(pageTable->size());
+				
+			}
+				pointer = (pointer+1)%(pageTable->size());
+			return frameNum;
+		}
+};;
+
+class LRU: AbstractAlgo
+{
+	private:
+	public: 
+	LRU(vector<Pte*>* ptable, vector<unsigned int>*ftable, vector<unsigned int>* ftopage) : AbstractAlgo(ptable, ftable, ftopage)	
+	{		
+		
+	}
+	
+	int getNewFrame()
+	{
+		int frame
+	}
+}
+
 #endif

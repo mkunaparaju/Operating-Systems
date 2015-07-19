@@ -69,12 +69,13 @@ int main(int argc, char* argv[])
 			prAlgo = new Random(pageTable, frameTable ,ftop, rn);
 			break;
 		case 's':
-			//cout << "inseconnd chance" << endl;
 			prAlgo = new SecondChance(pageTable, frameTable ,ftop);
 			break;
-			case 'c':
-			//cout << "inseconnd chance" << endl;
+		case 'c':
 			prAlgo = new Clock(pageTable, frameTable ,ftop);
+			break;
+		case 'X':
+			prAlgo = new VirtualClock(pageTable, frameTable ,ftop);
 			break;
 
 	}
@@ -105,7 +106,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
-//	cout << "set alkl options in mmu" << endl;
+	//	cout << "set alkl options in mmu" << endl;
 
 	//fstream inputFile(argv[1], ios_base::in);
 	while(inputFile >> operation)

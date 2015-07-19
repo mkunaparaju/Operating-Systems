@@ -1,21 +1,29 @@
+#ifndef ABSTRACT_ALGO
+#define ABSTRACT_ALGO
+
 #include <vector>
 #include "pte.cpp"
+#include "RandNum.cpp"
+
 using namespace std;
 
-class abstractAlgo
+class AbstractAlgo
 {
-	private:
-	vector<pte>* pageTable;
-	vector<int>* frameTable;
-	vector<int>* frameToPage;
+	protected:
+		vector<Pte*>* pageTable;
+		vector<unsigned int>* frameTable;
+		vector<unsigned int>* frameToPage;
 
 	public: 
-	
-	abstractAlgo(vector<pte>* ptable, vector<int>*ftable, vector<int>* ftopage)
-	{
-		this->pageTable = ptable;
-		this->frameTable = ftable;
-		this->frameToPage = ftopage;
-	}
-	
+
+		AbstractAlgo(vector<Pte*>* ptable, vector<unsigned int>*ftable, vector<unsigned int>* ftopage)
+		{
+			this->pageTable = ptable;
+			this->frameTable = ftable;
+			this->frameToPage = ftopage;	
+		}
+
+		virtual int getNewFrame() = 0;
+
 };
+#endif

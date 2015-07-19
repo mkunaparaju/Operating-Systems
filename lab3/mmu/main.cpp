@@ -72,8 +72,9 @@ int main(int argc, char* argv[])
 			//cout << "inseconnd chance" << endl;
 			prAlgo = new SecondChance(pageTable, frameTable ,ftop);
 			break;
-		default:
-			prAlgo = new Fifo(pageTable, frameTable ,ftop);
+			case 'c':
+			//cout << "inseconnd chance" << endl;
+			prAlgo = new Clock(pageTable, frameTable ,ftop);
 			break;
 
 	}

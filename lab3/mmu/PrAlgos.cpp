@@ -161,5 +161,82 @@ class LRU: public AbstractAlgo
 		}
 	}
 };
+class NRU: public AbstractAlgo
+{
+	private:
+	RandNum* rn;
+	int counter;;
+	public:
+	
+	NRU(vector<Pte*>* ptable, vector<unsigned int>*ftable, vector<unsigned int>* ftopage, RandNum* rn) : AbstractAlgo(ptable, ftable, ftopage)
+	{
+		//cout << "in NRU" << endl;
+		counter =0;;
+		this->rn = rn;
+	}
+	void updateFrame(int frameNum){}
+	int getNewFrame()
+	{
 
+		int frameNum=-1;
+		vector<Pte*> *pClass = new vector<Pte*>[4];
+		
+		for(int i =0; i<pageTable->size(); i++)
+		{
+					
+			if((pageTable->at(i))->present == 1)
+			{
+
+				if((pageTable->at(i))->referenced == 0 && (pageTable->at(i))->modified == 0)
+				{
+					
+					pClass[0].push_back(pageTable->at(i));
+				}
+				else if((pageTable->at(i))->referenced == 0 && (pageTable->at(i))->modified == 1)
+				{
+							
+					pClass[1].push_back(pageTable->at(i));
+				}
+				else if((pageTable->at(i))->referenced == 1 && (pageTable->at(i))->modified == 0)
+				{
+							
+					pClass[2].push_back(pageTable->at(i));
+				}
+				else if((pageTable->at(i))->referenced == 1 && (pageTable->at(i))->modified == 1)
+				{
+							
+					pClass[3].push_back(pageTable->at(i));
+				}			
+			}			
+		}
+
+		for (int i =0; i< 4; i++)
+		{
+			//cout << " 2nd for loop before if"<< endl;
+			if(!(pClass[i].empty())) 
+			{
+				//cout << " 2nd for loop] "<< endl;
+				int refNum = (rn->getRandNum()) % pClass[i].size();
+				Pte* page = pClass[i][refNum];
+				frameNum = page->pageFrameNum;
+			//	frameTable->erase(frameTable->begin() + frameNum);
+			//	frameTable->push_back(frameNum);				
+				
+				break;
+			}
+		}
+			counter++;
+			if (counter%10 ==0)
+				{
+					for(int i =0; i<pageTable->size(); i++)
+					{	
+						if((pageTable->at(i))->present == 1)
+						(pageTable->at(i))->referenced = 0;
+					}
+				}
+				
+			return frameNum;
+	
+	}
+};
 #endif

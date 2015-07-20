@@ -24,18 +24,20 @@ public:
 
 	int getRandNum()
 	{
-
+	getline(randFile, randLine);
 		if (randFile.eof())
 		{
+			randFile.clear();
 			randFile.seekg(0, ios::beg);
 			getline(randFile, randLine);
+			getline(randFile, randLine);
 		}
-		getline(randFile, randLine);
-		cout << "read " << randLine << endl;
+		
+		//cout << "read " << randLine << endl;
 		istringstream iss(randLine);
 		if (!(iss >> randValue))
 		{
-			cout << "exiting from program " << endl;
+			//cout << "exiting from program " << endl;
 			exit(99);
 		}
 

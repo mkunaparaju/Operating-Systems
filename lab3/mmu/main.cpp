@@ -80,7 +80,12 @@ int main(int argc, char* argv[])
 		case 'l':
 			prAlgo = new LRU(pageTable, frameTable ,ftop);
 			break;
+		case 'N':
+		//cout<< "inside N"<< endl;
+			prAlgo = new NRU(pageTable, frameTable ,ftop,rn);
+			break;
 
+			
 	}
 
 	//cout << "about to read input file" << endl;

@@ -236,7 +236,7 @@ class MemMgmt
 			cout << " ===> " << calcSummary() << endl;
 		}
 
-		int calcSummary()
+		long long calcSummary()
 		{
 			long long totalCycles = ((map+unmap)*400) + ((in+out)*3000) + (zero*150) + instrCounter;
 			return totalCycles;;

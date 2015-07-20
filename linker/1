@@ -1,0 +1,98 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+Token<char*> getNextToken(){
+	char ch;
+	int length = 0;
+	int position = 0, tokenStartLine = AbstractReader::lineNumber, tokenStartColumn = AbstractReader::columnNumber;
+	char* token = new char[512];
+	bool tokenStart = false, isWhiteSpace = false, emptyLine = true;
+
+	while(*(this->fin) >> ch){
+		if(ch == '\n'){
+			if(this->fin->tellg() != this->fileSize){
+				AbstractReader::lineNumber++;
+				AbstractReader::columnNumber = 1;
+			}
+			emptyLine = true;
+		}else{
+			emptyLine = false;
+			AbstractReader::columnNumber++;
+		}
+
+		isWhiteSpace = (ch == ' ' || ch == '\n' || ch == '\t');
+
+		if(tokenStart && isWhiteSpace){
+			token[position] = '\0';
+			break;
+		}else if(isWhiteSpace){
+			tokenStartLine = AbstractReader::lineNumber;
+			tokenStartColumn = AbstractReader::columnNumber;
+			continue;
+		}else if(!tokenStart){ // token is beginning here
+			tokenStartLine = AbstractReader::lineNumber;
+			tokenStartColumn = AbstractReader::columnNumber -1;
+			tokenStart = true;
+			length = 0;
+		}
+
+		length++;
+		token[position++] = ch;
+	}
+
+	Token<char*> newToken(tokenStartLine, tokenStartColumn, token, length);
+	return newToken;
+}
+
+int getInteger(ifstream &myFile)
+{
+	int intVal = (int) strtol(getNextToken(myFile), &last, 10);
+	return intVal;
+
+}
+char getSymbol()
+{	
+	return NULL;	
+}
+
+int getAddress
+{
+	int intVal = (int) strtol(getNextToken(myFile), &last, 10);
+	return intVal;
+}
+
+readDefinitionList(){
+	int count = getInteger();
+	for count times
+		getSymbol();
+	getAddress();
+}
+
+doFirstPass(){
+	readDefinitionList();
+	//readDefinitionList();
+	//readDefinitionList();
+}
+
+int main(int argc, char* argv[])
+{
+
+	if(argc != 2){
+		cout << "Number of arguments is not two " << endl;
+		exit(99);
+	}
+
+	ifstream myFile(argv[1]);
+	if(!myFile.good()){
+		cout << "file is not good" << endl;
+		exit(99);
+	}
+	ReaderUtil util = new ReaderUtil(argv[1]);
+	doFirstPass();
+	doSecondPass();
+	return 0;
+}
+

@@ -70,7 +70,7 @@ public:
 				{
 					if(it->getRelAddr() > progCount)
 					{
-						cout << "Warning: Module "<<modCount << ": " << it->getToken()  <<" to big " << it->getRelAddr() << "(max="<<(progCount-1) <<") assume zero relative" << endl;
+						cout <<endl << "Warning: Module "<<modCount << ": " << it->getToken()  <<" to big " << it->getRelAddr() << " (max="<<(progCount-1) <<") assume zero relative" << endl;
 						it->setRelAddr(0);
 						it->setAbsAddr(it->getModAddr() + it->getRelAddr());
 					}
@@ -96,7 +96,7 @@ public:
 		{
 			if (!(it->getIsUsed()))
 			{
-				cout << "Warning: Module " << it->getModCount() << ": " << it->getToken() << " was defined but never used" << endl;
+				cout << endl << "Warning: Module " << it->getModCount() << ": " << it->getToken() << " was defined but never used" << endl;
 			}
 		}
 	}

@@ -100,7 +100,7 @@ public:
 			//means that you are out definition list then str cannot be zero
 		{
 			//cout << " first num expected" << isDefList << " " << length << endl;
-			cout << "Parse Error Line at line " << tokenStartLine << "offset" << tokenStartColumn << ": NUM_EXPECTED " << endl;
+			cout << "Parse Error line at line " << tokenStartLine << "offset" << tokenStartColumn << ": NUM_EXPECTED " << endl;
 			exit(99);
 		}
 	
@@ -109,9 +109,9 @@ public:
 		//cout << "count is inside the getinteger function near endptr " << count << endl;
 		if(*endptr != '\0' || count < 0)
 		{
-			cout << "passed if " << endptr << endl;
+			//cout << "passed if " << endptr << endl;
 			//cout << " endptr " << endptr << " count  " << count ;
-			cout << "Parse Error Line " << tokenStartLine	<< " offset " << tokenStartColumn << " :NUM_EXPECTED " << endl;
+			cout << "Parse Error line " << tokenStartLine	<< " offset " << tokenStartColumn << ": NUM_EXPECTED " << endl;
 			exit(99);	
 		}
 		
@@ -134,18 +134,18 @@ public:
 		//cout << " in getSymbol " << str;
 		if (length == 0)
 		{
-			cout << "Parse error line " << tokenStartLine << " offset" << tokenStartColumn << ": SYM_EXPECTED" << endl;
+			cout << "Parse Error line " << tokenStartLine << " offset " << tokenStartColumn << ": SYM_EXPECTED" << endl;
 			exit(99);
 		}
 		if 	(length > 16)
 		{
-			cout << "Parse error line " << tokenStartLine << " offset " << tokenStartColumn << ": SYM_TOLONG " << endl;
+			cout << "Parse Error line " << tokenStartLine << " offset " << tokenStartColumn << ": SYM_TOLONG " << endl;
 			exit(99);
 		}
 		
 		if(c >= 48 && c < 57)
 		{
-			cout << "Parse error line " << tokenStartLine << " offset " << tokenStartColumn << ": SYM_EXPECTED " << endl;
+			cout << "Parse Error line " << tokenStartLine << " offset " << tokenStartColumn << ": SYM_EXPECTED " << endl;
 			exit(99);
 		}
 		
@@ -171,7 +171,7 @@ public:
 		case 'E':
 			break;
 		default:
-			cout << "Parse error line " << tokenStartLine << " offset " << tokenStartColumn << ": ADDR_EXPECTED " << endl;
+			cout << "Parse Error line " << tokenStartLine << " offset " << tokenStartColumn << ": ADDR_EXPECTED " << endl;
 			exit(99);
 			break;
 	}

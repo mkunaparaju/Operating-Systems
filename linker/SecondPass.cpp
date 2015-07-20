@@ -67,11 +67,12 @@ class SecondPass
 		int newInstr =0;
 		int useCount = useMap.size();
 		map <string, bool> instrMap;
-		string error = "\0";
+		string error = "";
 		//cout << baseAddr  <<" base  addr"<< endl;
 		
 		while(count--)
 		{
+			error = "";
 			char addr = util->getAddr();
 			Token<int> tok = util->getInstr();
 			int length = tok.getLength();
@@ -96,7 +97,8 @@ class SecondPass
 			else if (instr > 9999)
 			{
 				 error ="Error: Illegal opcode; treated as 9999 ";
-				instr = 9999;
+				opCode = 9;
+				operand = 999;
 			}
 			else if(addr == 'R')
 			{
@@ -109,25 +111,28 @@ class SecondPass
 			}
 			else if(addr == 'E')
 			{
+
 				if(operand > useCount-1)
 				{
+					
 					error =  "Error: External address exceeds length of uselist; treated as immediate" ;
 					addr = 'I';
-				}else{
-					
-				symbol = useMap[operand];
-				//cout << "operand is " << operand << " symbol is " << symbol << endl;
-				bool isUsed = sl->isSymbolPresent(symbol);
-				
-				instrMap.insert(pair<string, bool>(symbol, true));
-				
-				if (!isUsed)
-				{
-					error =  "Error: "+ symbol +" is not defined; zero used";
 					operand = 0;
-				}			
-			}
+				}else
+				{
+					symbol = useMap[operand];
+					//cout << "operand is " << operand << " symbol is " << symbol << endl;
+					bool isUsed = sl->isSymbolPresent(symbol);
 					
+					instrMap.insert(pair<string, bool>(symbol, true));
+					
+					if (!isUsed)
+					{
+						//	cout << " im here "<< endl; 
+						error =  "Error: "+ symbol +" is not defined; zero used";
+						operand = 0;
+					}			
+				}
 			}
 			else if(addr == 'A')
 			{
@@ -139,18 +144,20 @@ class SecondPass
 			
 			}
 			
-	//	cout << "returning from prog text read " << endl;
+		
 		cout << setfill('0') << setw(3) << instrCount << ": " ;
-
+		
 		switch (addr)
 		{
 			case 'I':
+				newInstr =(opCode)*1000 + operand;	
+				//cout << " inside Instruction new instr " << newInstr << endl;		
 				cout << setfill('0') << setw(4) << instr << " " << error <<endl;
 			break;
 			
 			case 'A':
 				newInstr = (opCode)*1000 + operand;
-				cout << setfill('0') << setw(4) <<newInstr <<  " " <<error << endl;
+				cout << setfill('0') << setw(4) <<newInstr << " " <<error << endl;
 				
 			break;
 			
@@ -163,8 +170,12 @@ class SecondPass
 			
 			case 'E':
 				symbol = useMap[operand];
-				operand = sl->getAbAddr(symbol);
+				if (error == "")
+				{
+					operand = sl->getAbAddr(symbol);
+				}
 				newInstr = (opCode)*1000 + operand;
+				
 				cout << setfill('0') << setw(4) << newInstr <<  " " <<error << endl;
 				
 			break;
@@ -179,7 +190,7 @@ class SecondPass
 				string sym = useMap[i];
 				if (!(instrMap.count(sym) > 0))
 				{
-					cout << "Warning: Module "<<modCount<< ": "<<sym<<" appeared in the uselist but was not actually used "<< endl;
+					cout<< endl << "Warning: Module "<<modCount<< ": "<<sym<<" appeared in the uselist but was not actually used "<< endl;
 				}
 			}
 			

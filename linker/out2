@@ -1,0 +1,20 @@
+Warning: Module 2: a to big 2 (max=0) assume zero relative
+Warning: Module 3: c to big 2 (max=-1) assume zero relative
+Symbol Table
+b=2
+a=3
+c=4
+
+Memory Map
+000: 0001
+001: 0001
+002: 0001
+Warning: Module 1: b appeared in the uselist but was not actually used
+003: 2000
+Warning: Module 2: b appeared in the uselist but was not actually used
+Warning: Module 3: c appeared in the uselist but was not actually used
+
+Warning: Module 1: b was defined but never used
+Warning: Module 2: a was defined but never used
+Warning: Module 3: c was defined but never used
+

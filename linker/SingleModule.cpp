@@ -37,7 +37,7 @@ class SingleModule {
 		//cout << "Count is " << count << endl;
 		if (count > 16)
 		{
-			cout << "Parse error line " << newInteger.getLineNumber() << " offset " << newInteger.getColumnNumber() << " TO_MANY_DEF_IN_MODULE " << endl ;
+			cout << "Parse Error line " << newInteger.getLineNumber() << " offset " << newInteger.getColumnNumber() << ": TO_MANY_DEF_IN_MODULE " << endl ;
 			exit(99);
 		}
 		//cout << "Count after if condition is " << count << endl;
@@ -66,7 +66,7 @@ class SingleModule {
 		
 		if (count > 16)
 		{
-			cout << "Parse error line " << newInteger.getLineNumber() << " offset " << newInteger.getColumnNumber() << " TO_MANY_USE_IN_MODULE " << endl ;
+			cout << "Parse Error line " << newInteger.getLineNumber() << " offset " << newInteger.getColumnNumber() << ": TO_MANY_USE_IN_MODULE " << endl ;
 			exit(99);
 		}
 		
@@ -85,7 +85,8 @@ class SingleModule {
 		int count = newInteger.getValue(); 
 		if((count + modCount) > 512)
 		{
-			cout << "Parse error line " << newInteger.getLineNumber() << " offset " << newInteger.getColumnNumber() << " TO_MANY_INSTR " << endl ;
+			cout << "Parse Error line " << newInteger.getLineNumber() << " offset " << newInteger.getColumnNumber() << ": TO_MANY_INSTR " << endl ;
+			exit(99);
 		}			
 		//cout << " base addr1 " << baseAddr;
 		int progCount = count;

@@ -9,6 +9,7 @@
 #include "FIFO.cpp"
 #include "RandNum.cpp"
 #include "PrAlgos.cpp"
+#include "Aging.cpp"
 
 using namespace std;
 
@@ -83,6 +84,10 @@ int main(int argc, char* argv[])
 		case 'N':
 		//cout<< "inside N"<< endl;
 			prAlgo = new NRU(pageTable, frameTable ,ftop,rn);
+			break;
+		case 'a':
+		//cout<< "inside N"<< endl;
+			prAlgo = new Aging(pageTable, frameTable ,ftop);
 			break;
 
 			

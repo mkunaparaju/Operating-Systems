@@ -58,4 +58,62 @@ class Aging: public AbstractAlgo
 		void updateFrame(int frameNum){}
 };
 
+
+class VirtualAging : public AbstractAlgo 
+{
+	private:
+		vector<unsigned int> count;
+		
+	public:
+		VirtualAging(vector<Pte*>* ptable, vector<unsigned int>*ftable, vector<unsigned int>* ftopage): AbstractAlgo(ptable, ftable,ftopage)
+		{
+			 count =  vector<unsigned int>(64, 0);	
+		}
+		
+	int getNewFrame()
+	{
+		int frameNum =-1;
+		unsigned int counter;
+		unsigned int rbit;
+		for(int i=0; i<pageTable->size(); i++)
+		{
+			frameNum = (pageTable->at(i))->pageFrameNum;;
+			rbit = (pageTable->at(i))->referenced;
+			counter = count[i];
+			counter = (counter >>1 | rbit <<31);
+			count[i] = counter;
+			if((pageTable->at(i))->present == 1)
+			{
+				(pageTable->at(i))->referenced = 0;
+			}
+			
+		}
+			
+			unsigned int min = 0xffffffff;
+			unsigned int temp =0;
+			int minIndex = 0;
+			int newFrameNum=0;
+			
+			for(int i =0; i< pageTable->size(); i++)
+			{
+				if((pageTable->at(i))->present == 1)
+				{
+					frameNum = (pageTable->at(i))->pageFrameNum;
+					temp = count[i];
+
+					if(temp <  min)
+					{
+						min = temp;
+						
+						minIndex = i;
+					}
+				}
+				count[minIndex] = 0;
+				return (pageTable->at(minIndex))->pageFrameNum;;
+			}
+	}	
+			
+	void updateFrame(int frameNum){}	
+};		
+
 #endif

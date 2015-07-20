@@ -62,6 +62,8 @@ class MemMgmt
 			if((pageTable->at(currPageNum))->present == true)
 			{				
 				currFrameNum = (pageTable->at(currPageNum))->pageFrameNum;
+				prAlgo->updateFrame(currFrameNum);
+				
 			}
 			else
 			{
@@ -109,6 +111,7 @@ class MemMgmt
 						cout <<instrCounter<< ": MAP  " <<setfill(' ') << setw(4) << currPageNum  << setw(4) << oldFrame << endl;
 					}
 					map++;
+					(pageTable->at(currPageNum))->pageFrameNum = oldFrame;
 					frameToPage->at(oldFrame) = currPageNum;
 				}
 

@@ -24,7 +24,7 @@ class AbstractAlgo
 		}
 
 		virtual int getNewFrame() = 0;
-		virtual void updateframe() = 0;
+		virtual void updateFrame(int) = 0;
 
 };
 #endif

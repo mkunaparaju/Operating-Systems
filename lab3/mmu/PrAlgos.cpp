@@ -12,7 +12,7 @@ class Random: public AbstractAlgo
 	{
 		this->rn = rn;
 	}
-
+		void updateFrame(int frameNum){}
 		int getNewFrame()
 		{
 			return (rn->getRandNum())% (frameTable->size());
@@ -29,7 +29,7 @@ class SecondChance : public AbstractAlgo
 		SecondChance(vector<Pte*>* ptable, vector<unsigned int>*ftable, vector<unsigned int>* ftopage) : AbstractAlgo(ptable, ftable, ftopage)
 	{
 	}
-
+		void updateFrame(int frameNum){}
 		int getNewFrame()
 		{
 			//	cout << "inside 2nd cance"<< endl;
@@ -65,7 +65,8 @@ class Clock: public AbstractAlgo
 	{
 		pointer =-1;
 	}
-
+		void updateFrame(int frameNum){}
+		
 		int getNewFrame() {
 			int frameNum = -1;
 			int pageNum = -1;
@@ -104,7 +105,9 @@ class VirtualClock: public AbstractAlgo
 			//cout << "Creatinga  vritual clock object " << endl;
 			pointer =0;
 		}
-
+		void updateFrame(int frameNum){}
+		
+		
 		int getNewFrame()
 		{
 			int frameNum = -1;
@@ -115,7 +118,7 @@ class VirtualClock: public AbstractAlgo
 			
 				if((pageTable->at(pointer))->present == 1)
 				{
-					cout << "the frame number "<< frameNum << " the page index "<< frameToPage->at(frameNum) << endl;
+					//cout << "the frame number "<< frameNum << " the page index "<< frameToPage->at(frameNum) << endl;
 					if((pageTable->at(pointer))->referenced == 0)
 					{
 						break;;
@@ -130,7 +133,7 @@ class VirtualClock: public AbstractAlgo
 		}
 };;
 
-class LRU: AbstractAlgo
+class LRU: public AbstractAlgo
 {
 	private:
 	public: 
@@ -141,8 +144,22 @@ class LRU: AbstractAlgo
 	
 	int getNewFrame()
 	{
-		int frame
+		int frameNum = frameTable->front();
+		frameTable->erase(frameTable->begin());
+		frameTable->push_back(frameNum);
+		return frameNum;
 	}
-}
+	void updateFrame(int frameNum)
+	{
+		for(int i=0; i<frameTable->size(); i++)
+		{
+			if(frameTable->at(i) == frameNum)
+			{
+				frameTable->erase(frameTable->begin() +i);
+				frameTable->push_back(frameNum);
+			}
+		}
+	}
+};
 
 #endif

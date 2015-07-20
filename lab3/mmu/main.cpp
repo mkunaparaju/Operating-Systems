@@ -77,6 +77,9 @@ int main(int argc, char* argv[])
 		case 'X':
 			prAlgo = new VirtualClock(pageTable, frameTable ,ftop);
 			break;
+		case 'l':
+			prAlgo = new LRU(pageTable, frameTable ,ftop);
+			break;
 
 	}
 

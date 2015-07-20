@@ -24,5 +24,6 @@ class Fifo : public AbstractAlgo
 		return frame;
 		
 	}
+	void updateFrame(int frameNum){}
 };
 #endif

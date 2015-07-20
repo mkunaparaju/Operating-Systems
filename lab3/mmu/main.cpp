@@ -89,6 +89,10 @@ int main(int argc, char* argv[])
 		//cout<< "inside N"<< endl;
 			prAlgo = new Aging(pageTable, frameTable ,ftop);
 			break;
+		case 'Y':
+		//cout<< "inside N"<< endl;
+			prAlgo = new VirtualAging(pageTable, frameTable ,ftop);
+			break;
 
 			
 	}

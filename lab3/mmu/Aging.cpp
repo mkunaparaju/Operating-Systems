@@ -72,12 +72,16 @@ class VirtualAging : public AbstractAlgo
 		
 	int getNewFrame()
 	{
+		
 		int frameNum =-1;
 		unsigned int counter;
 		unsigned int rbit;
 		for(int i=0; i<pageTable->size(); i++)
 		{
-			frameNum = (pageTable->at(i))->pageFrameNum;;
+			if((pageTable->at(i))->present == 0 )
+			{
+				continue;
+			}				
 			rbit = (pageTable->at(i))->referenced;
 			counter = count[i];
 			counter = (counter >>1 | rbit <<31);
@@ -96,21 +100,24 @@ class VirtualAging : public AbstractAlgo
 			
 			for(int i =0; i< pageTable->size(); i++)
 			{
-				if((pageTable->at(i))->present == 1)
-				{
+				
+			if((pageTable->at(i))->present == 0 )
+			{
+				continue;
+			}			
 					frameNum = (pageTable->at(i))->pageFrameNum;
 					temp = count[i];
 
 					if(temp <  min)
 					{
 						min = temp;
-						
+						newFrameNum = frameNum;
 						minIndex = i;
 					}
-				}
-				count[minIndex] = 0;
-				return (pageTable->at(minIndex))->pageFrameNum;;
 			}
+				count[minIndex] = 0;
+				return newFrameNum;
+			
 	}	
 			
 	void updateFrame(int frameNum){}	

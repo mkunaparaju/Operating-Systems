@@ -70,6 +70,7 @@ int main(int argc, char* argv[])
 	
 	Transition* trans = new Transition(eventQueue, ioReqList, sched);
 	trans->transLogic();
+	trans->ioReqsInfo();
 	
 
 	return 0;

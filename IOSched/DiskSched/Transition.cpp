@@ -13,6 +13,11 @@ struct eventComparator
 {
 	bool operator()(Event* lhs, Event* rhs) const
 	{
+		if(lhs->getTimeStep() == rhs->getTimeStep())
+		{
+			return lhs->getEid() > rhs->getEid();;
+		}
+			
 			return lhs->getTimeStep() > rhs->getTimeStep();
 
 	}
@@ -62,14 +67,17 @@ class Transition
 			}
 			else if(event->getState() == IoRequest::ISSUE)
 			{
+				currIoReq->setIssueTime(curTimeStep);
 				trackMove = abs(curEventTrack - curTrack);
 				Event* newEvent  = new Event(currIoReq->getIoId(), curTimeStep+trackMove, curEventTrack, IoRequest::FINISH);
 				eventQueue.push(newEvent);
 				cout << curTimeStep << ":" << setw(6) << setfill(' ') << reqID << " issue " << curEventTrack << " " << curTrack << endl;
 				curTrack = curEventTrack;
+				
 			}
 			else if(event->getState() == IoRequest::FINISH)
 			{
+				currIoReq->setFinishTime(curTimeStep);
 				cout << curTimeStep << ":" << setw(6) << setfill(' ') << reqID << " finish " << curTimeStep-currIoReq->getArrTime() << endl;
 			}
 			//cout << "currtimestep "<< curTimeStep << " NEXTIOFREETIME " << nextIoFreeTime << endl;;  
@@ -81,14 +89,27 @@ class Transition
 					Event* newEvent = new Event(newReq->getIoId(), curTimeStep, newReq->getTrack(), IoRequest::ISSUE);
 					eventQueue.push(newEvent);
 					nextIoFreeTime = curTimeStep + abs(newReq->getTrack() - curTrack);
-
+					
 				}
 			}
 			
 		}
 	}
 	
-	void 
+	void ioReqsInfo()
+	{
+		cout << "IOREQS INFO"<<endl;
+		for (int i =0;i< ioReqList.size(); i++)
+		{
+			cout << setw(5)<< setfill(' ') << i << ":" << setw(6)<< setfill(' ') <<	 ioReqList[i]->getArrTime();;
+			cout << setw(6)<< setfill(' ') << ioReqList[i]->getIssueTime(); 
+			cout << setw(6)<< setfill(' ') << ioReqList[i]->getFinishTime() << endl;
+		}
+	}
 	
+	void printSummary()
+	{
+		
+	}
 };
 #endif

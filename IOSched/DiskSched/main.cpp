@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 		{
 			case 's' :
 			algo =optarg[0];
-			cout << "algo is " << algo << endl;
+			//cout << "algo is " << algo << endl;
 			break;
 			 
 		}
@@ -68,6 +68,8 @@ int main(int argc, char* argv[])
 		}
 	}
 	
+	Transition* trans = new Transition(eventQueue, ioReqList, sched);
+	trans->transLogic();
 	
 
 	return 0;

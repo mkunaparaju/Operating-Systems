@@ -2,6 +2,7 @@
 #define DISKSCHED_CPP
 
 #include <queue>
+#include <iomanip>
 #include "Event.cpp"
 #include "AbsSched.cpp"
 #include "IoRequest.cpp"
@@ -35,8 +36,59 @@ class Transition
 	
 	void transLogic()
 	{
-		cout<< "in transition" << endl;
+		cout << "TRACE" << endl;
+		int curTimeStep =0;
+		int curEventTrack =0;
+		int curTrack=0;;
+		int reqID;
+		int nextIoFreeTime =0;
+		int trackMove =0;;	
+		
+		while(eventQueue.size() >0)
+		{
+			Event* event = eventQueue.top();
+			eventQueue.pop();
+			curTimeStep = event->getTimeStep();
+			reqID = event->getIoId();
+			curEventTrack = event->getTrack();
+			IoRequest* currIoReq = ioReqList[reqID];
+			
+			if(event->getState() == IoRequest::ADD)
+			{
+
+				sched->addRequest(currIoReq);
+				cout << curTimeStep << ":" << setw(6) << setfill(' ') << reqID << " add " << curEventTrack << endl;
+       
+			}
+			else if(event->getState() == IoRequest::ISSUE)
+			{
+				trackMove = abs(curEventTrack - curTrack);
+				Event* newEvent  = new Event(currIoReq->getIoId(), curTimeStep+trackMove, curEventTrack, IoRequest::FINISH);
+				eventQueue.push(newEvent);
+				cout << curTimeStep << ":" << setw(6) << setfill(' ') << reqID << " issue " << curEventTrack << " " << curTrack << endl;
+				curTrack = curEventTrack;
+			}
+			else if(event->getState() == IoRequest::FINISH)
+			{
+				cout << curTimeStep << ":" << setw(6) << setfill(' ') << reqID << " finish " << curTimeStep-currIoReq->getArrTime() << endl;
+			}
+			//cout << "currtimestep "<< curTimeStep << " NEXTIOFREETIME " << nextIoFreeTime << endl;;  
+			if(curTimeStep >= nextIoFreeTime)
+			{
+				IoRequest* newReq = sched->getNewRequest();
+				if(newReq != NULL)
+				{
+					Event* newEvent = new Event(newReq->getIoId(), curTimeStep, newReq->getTrack(), IoRequest::ISSUE);
+					eventQueue.push(newEvent);
+					nextIoFreeTime = curTimeStep + abs(newReq->getTrack() - curTrack);
+
+				}
+			}
+			
+		}
 	}
+	
+	void 
 	
 };
 #endif

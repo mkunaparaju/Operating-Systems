@@ -14,6 +14,10 @@ class Fifo: public AbsSched
 	
 	void addRequest(IoRequest* ioRequest)
 	{
+		if(ioRequest == NULL)
+		{
+			return;;
+		}
 		readyQueue.push(ioRequest);
 	}
 	

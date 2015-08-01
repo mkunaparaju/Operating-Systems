@@ -30,6 +30,12 @@ class Transition
 	priority_queue<Event*, vector<Event*>, eventComparator> eventQueue;
 	vector<IoRequest*> ioReqList;
 	AbsSched* sched;
+	int totalMovement;
+	int totalTime;
+	int waitTime ;
+	int max_waittime;
+	int curTimeStep ;;
+	
 	
 	public:
 	Transition(priority_queue<Event*, vector<Event*>, eventComparator> eventQueue, vector<IoRequest*> ioReqList, AbsSched* sched  )
@@ -37,12 +43,17 @@ class Transition
 		this->eventQueue = eventQueue;
 		this->ioReqList = ioReqList;
 		this->sched = sched;
+		totalMovement =0;
+		totalTime = 0;
+		waitTime =0;
+		max_waittime =0;
+		curTimeStep =0;
 	}
 	
 	void transLogic()
 	{
 		cout << "TRACE" << endl;
-		int curTimeStep =0;
+		
 		int curEventTrack =0;
 		int curTrack=0;;
 		int reqID;
@@ -69,6 +80,7 @@ class Transition
 			{
 				currIoReq->setIssueTime(curTimeStep);
 				trackMove = abs(curEventTrack - curTrack);
+				totalMovement = totalMovement+trackMove;;
 				Event* newEvent  = new Event(currIoReq->getIoId(), curTimeStep+trackMove, curEventTrack, IoRequest::FINISH);
 				eventQueue.push(newEvent);
 				cout << curTimeStep << ":" << setw(6) << setfill(' ') << reqID << " issue " << curEventTrack << " " << curTrack << endl;
@@ -83,7 +95,7 @@ class Transition
 			//cout << "currtimestep "<< curTimeStep << " NEXTIOFREETIME " << nextIoFreeTime << endl;;  
 			if(curTimeStep >= nextIoFreeTime)
 			{
-				IoRequest* newReq = sched->getNewRequest();
+				IoRequest* newReq = sched->getNewRequest(curTrack);
 				if(newReq != NULL)
 				{
 					Event* newEvent = new Event(newReq->getIoId(), curTimeStep, newReq->getTrack(), IoRequest::ISSUE);
@@ -101,6 +113,12 @@ class Transition
 		cout << "IOREQS INFO"<<endl;
 		for (int i =0;i< ioReqList.size(); i++)
 		{
+			totalTime = totalTime + (ioReqList[i]->getFinishTime() - ioReqList[i]->getArrTime());
+			waitTime = waitTime + (ioReqList[i]->getIssueTime() - ioReqList[i]->getArrTime());
+			if((ioReqList[i]->getIssueTime() - ioReqList[i]->getArrTime()) > max_waittime)
+			{
+				max_waittime = (ioReqList[i]->getIssueTime() - ioReqList[i]->getArrTime());
+			}
 			cout << setw(5)<< setfill(' ') << i << ":" << setw(6)<< setfill(' ') <<	 ioReqList[i]->getArrTime();;
 			cout << setw(6)<< setfill(' ') << ioReqList[i]->getIssueTime(); 
 			cout << setw(6)<< setfill(' ') << ioReqList[i]->getFinishTime() << endl;
@@ -109,7 +127,15 @@ class Transition
 	
 	void printSummary()
 	{
+		double avg_turnaround = (totalTime/(double)ioReqList.size());
+		double avg_waittime = waitTime/(double)ioReqList.size();
 		
+		printf("SUM: %d %d %.2lf %.2lf %d\n",
+				curTimeStep,
+				totalMovement,
+				avg_turnaround,
+				avg_waittime,
+				max_waittime);	
 	}
 };
 #endif

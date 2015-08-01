@@ -11,6 +11,7 @@
 #include "Transition.cpp"
 #include "AbsSched.cpp"
 #include "Schedulers.cpp"
+#include "Sstf.cpp"
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -46,9 +47,10 @@ int main(int argc, char* argv[])
 		sched = new Fifo();
 		break;
 		
-		default :
-		sched = new Fifo();
-		break;		
+		case 'j':
+		sched = new Sstf();
+		break;
+			
 	}
 	//cout << "optind" << argv[optind] << endl;
 	fstream inFile(argv[optind], ios_base::in);
@@ -71,6 +73,7 @@ int main(int argc, char* argv[])
 	Transition* trans = new Transition(eventQueue, ioReqList, sched);
 	trans->transLogic();
 	trans->ioReqsInfo();
+	trans->printSummary();
 	
 
 	return 0;

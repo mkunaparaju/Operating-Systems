@@ -7,8 +7,9 @@ using namespace std;
 
 class Fifo: public AbsSched
 {
+
 	private:
-	queue<IoRequest*> readyQueue;
+	queue<IoRequest*> ioReqQueue;
 	
 	public:
 	
@@ -18,21 +19,23 @@ class Fifo: public AbsSched
 		{
 			return;;
 		}
-		readyQueue.push(ioRequest);
+		ioReqQueue.push(ioRequest);
 	}
 	
-	IoRequest* getNewRequest()
+	IoRequest* getNewRequest(int curEventTrack)
 	{
-		if(readyQueue.size() == 0)
+		if(ioReqQueue.size() == 0)
 		{
 			return NULL;
 		}
 		
-		IoRequest* ioRequest  = readyQueue.front();
-		readyQueue.pop();
+		IoRequest* ioRequest  = ioReqQueue.front();
+		ioReqQueue.pop();
 		
 		return ioRequest;
 	}
 };
+
+
 
 #endif

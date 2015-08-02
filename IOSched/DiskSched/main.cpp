@@ -28,12 +28,13 @@ int main(int argc, char* argv[])
 	int track;
 	int ioId;
 	string str;
+	bool vflag;
 	AbsSched* sched;;
 	IoRequest* ioRequest;
 	vector<IoRequest*> ioReqList;
 	priority_queue<Event*, vector<Event*>, eventComparator> eventQueue;
 	
-	while((caseType = getopt(argc, argv, "s:")) != -1)
+	while((caseType = getopt(argc, argv, "vs:")) != -1)
 	{
 		switch(caseType)
 		{
@@ -42,6 +43,9 @@ int main(int argc, char* argv[])
 			//cout << "algo is " << algo << endl;
 			break;
 			 
+			case 'v':
+			vflag = 1;
+			break;
 		}
 	}
 	
@@ -87,7 +91,7 @@ int main(int argc, char* argv[])
 		}
 	}
 	
-	Transition* trans = new Transition(eventQueue, ioReqList, sched);
+	Transition* trans = new Transition(eventQueue, ioReqList, sched, vflag);
 	trans->transLogic();
 	trans->ioReqsInfo();
 	trans->printSummary();

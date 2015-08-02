@@ -13,29 +13,47 @@ struct eventComparator
 {
 	bool operator()(Event* lhs, Event* rhs) const
 	{
-		if(lhs->getTimeStep() > rhs->getTimeStep())
+		if(lhs->getTimeStep() != rhs->getTimeStep())
 		{
-			return true;
+			return lhs->getTimeStep() > rhs->getTimeStep();
 		}
-		else if(lhs->getTimeStep() == rhs->getTimeStep())
+		else
 		{
-			if(lhs->getState() > rhs->getState())
+			if(lhs->getState() == rhs->getState())
 			{
-				return true;
-			}		
+				return lhs->getEid() > rhs->getEid();
+			}
+			return lhs->getState() > rhs->getState();
 		}
-		else if(lhs->getTimeStep() == rhs->getTimeStep() && lhs->getEid() > rhs->getEid())
-		{
-			return true;
-		}
-	// if(lhs->getTimeStep() == rhs->getTimeStep())
-		// {
-			// return lhs->getEid() > rhs->getEid();;
-		// }
-			
-			// return lhs->getTimeStep() > rhs->getTimeStep();
-
 	}
+	/*
+ * 	if timestamps are different.  return comparison of timestamps
+ *
+ * 	if timestamps are equal
+ * 		if states are equal
+ * 			return eids
+ * 		else return state comparison
+ *
+ // */
+	// bool operator()(Event* lhs, Event* rhs) const
+	// {
+		// if(lhs->getTimeStep() > rhs->getTimeStep())
+		// {
+			// return true;
+		// }
+		// else if(lhs->getTimeStep() == rhs->getTimeStep())
+		// {
+			// if(lhs->getState() > rhs->getState())
+			// {
+				// return true;
+			// }		
+		// }
+		// else if(lhs->getTimeStep() == rhs->getTimeStep() && lhs->getEid() > rhs->getEid())
+		// {
+			// return true;
+		// }
+		// return false;
+	// }
 };
 
 class Transition	
@@ -77,9 +95,9 @@ class Transition
 		
 		int curEventTrack =0;
 		int curTrack=0;;
-		int reqID;
+		int reqID = 0;
 		int nextIoFreeTime =0;
-		int trackMove =0;;	
+		int trackMove =0;	
 		
 		while(eventQueue.size() >0)
 		{
@@ -89,10 +107,8 @@ class Transition
 			reqID = event->getIoId();
 			curEventTrack = event->getTrack();
 			IoRequest* currIoReq = ioReqList[reqID];
-			
 			if(event->getState() == IoRequest::ADD)
 			{
-
 				sched->addRequest(currIoReq);
 				
 				if(vflag)
@@ -124,7 +140,6 @@ class Transition
 					cout << curTimeStep << ":" << setw(6) << setfill(' ') << reqID << " finish " << curTimeStep-currIoReq->getArrTime() << endl;
 				}
 			}
-			//cout << "currtimestep "<< curTimeStep << " NEXTIOFREETIME " << nextIoFreeTime << endl;;  
 			if(curTimeStep >= nextIoFreeTime)
 			{
 				IoRequest* newReq = sched->getNewRequest(curTrack);

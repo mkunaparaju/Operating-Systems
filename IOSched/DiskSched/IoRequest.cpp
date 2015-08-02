@@ -20,7 +20,6 @@ class IoRequest
 		ADD ,
 		FINISH,
 		ISSUE
-		
 	};
 	
 	IoRequest(int arrTime, int track, int ioId)

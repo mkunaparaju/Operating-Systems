@@ -13,12 +13,27 @@ struct eventComparator
 {
 	bool operator()(Event* lhs, Event* rhs) const
 	{
-		if(lhs->getTimeStep() == rhs->getTimeStep())
+		if(lhs->getTimeStep() > rhs->getTimeStep())
 		{
-			return lhs->getEid() > rhs->getEid();;
+			return true;
 		}
+		else if(lhs->getTimeStep() == rhs->getTimeStep())
+		{
+			if(lhs->getState() > rhs->getState())
+			{
+				return true;
+			}		
+		}
+		else if(lhs->getTimeStep() == rhs->getTimeStep() && lhs->getEid() > rhs->getEid())
+		{
+			return true;
+		}
+	// if(lhs->getTimeStep() == rhs->getTimeStep())
+		// {
+			// return lhs->getEid() > rhs->getEid();;
+		// }
 			
-			return lhs->getTimeStep() > rhs->getTimeStep();
+			// return lhs->getTimeStep() > rhs->getTimeStep();
 
 	}
 };

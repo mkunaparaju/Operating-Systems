@@ -12,6 +12,10 @@
 #include "AbsSched.cpp"
 #include "Schedulers.cpp"
 #include "Sstf.cpp"
+#include "Elevator.cpp"
+#include "Cscan.cpp"
+#include "Fscan.cpp"
+
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -33,7 +37,7 @@ int main(int argc, char* argv[])
 	{
 		switch(caseType)
 		{
-			case 's' :
+			case 's': 
 			algo =optarg[0];
 			//cout << "algo is " << algo << endl;
 			break;
@@ -50,6 +54,19 @@ int main(int argc, char* argv[])
 		case 'j':
 		sched = new Sstf();
 		break;
+		
+		case 's':
+//		cout << "inside" << endl;
+		sched = new Elevator();
+		break;;
+		
+		case 'c':
+		sched = new Cscan();
+		break;
+		
+		case 'f':
+		sched = new FSCAN();
+		break;;
 			
 	}
 	//cout << "optind" << argv[optind] << endl;

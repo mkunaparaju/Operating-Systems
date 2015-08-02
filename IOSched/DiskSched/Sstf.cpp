@@ -1,7 +1,7 @@
 #ifndef SSTF_CPP
 #define SSTF_CPP
 
-#include <queue>
+#include <vector>
 #include "AbsSched.cpp"
 #include <limits.h>
 

@@ -17,9 +17,10 @@ class IoRequest
 	
 	enum states
 	{
-		ADD = 1,
-		ISSUE =2,
-		FINISH =3
+		ADD ,
+		FINISH,
+		ISSUE
+		
 	};
 	
 	IoRequest(int arrTime, int track, int ioId)
